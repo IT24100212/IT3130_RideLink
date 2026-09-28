@@ -26,21 +26,21 @@ public class RideController {
 
     // 2. System assigns a driver to the requested ride
     @PutMapping("/{rideId}/assign")
-    public ResponseEntity<Ride> assignDriver(@PathVariable Long rideId,
+    public ResponseEntity<Ride> assignDriver(@PathVariable String rideId,
                                              @RequestParam Long driverId) {
         return ResponseEntity.ok(rideService.assignDriver(rideId, driverId));
     }
 
     // 3. Update the ride status (e.g., ACCEPTED, IN_PROGRESS, COMPLETED)
     @PutMapping("/{rideId}/status")
-    public ResponseEntity<Ride> updateStatus(@PathVariable Long rideId,
+    public ResponseEntity<Ride> updateStatus(@PathVariable String rideId,
                                              @RequestParam RideStatus status) {
         return ResponseEntity.ok(rideService.updateRideStatus(rideId, status));
     }
 
     // 4. Fetch ride details
     @GetMapping("/{rideId}")
-    public ResponseEntity<Ride> getRide(@PathVariable Long rideId) {
+    public ResponseEntity<Ride> getRide(@PathVariable String rideId) {
         return ResponseEntity.ok(rideService.getRideById(rideId));
     }
 }

@@ -2,13 +2,13 @@ package com.ridelink.ride.repository;
 
 import com.ridelink.ride.model.Ride;
 import com.ridelink.ride.model.RideStatus;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface RideRepository extends JpaRepository<Ride, Long> {
+public interface RideRepository extends MongoRepository<Ride, String> {
 
     // Custom query methods to easily find rides for specific users
     List<Ride> findByPassengerId(Long passengerId);

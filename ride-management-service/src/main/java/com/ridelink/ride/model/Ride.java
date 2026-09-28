@@ -1,32 +1,26 @@
 package com.ridelink.ride.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "rides")
+@Document(collection = "rides")
 public class Ride {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     // Notice these are just Longs, NOT @ManyToOne, to keep databases isolated
-    @Column(nullable = false)
     private Long passengerId;
 
-    @Column(nullable = true) // Nullable because it's empty when first requested
     private Long driverId;
 
-    @Column(nullable = false)
     private String pickupLocation; // Can be a simulated coordinate or place name
 
-    @Column(nullable = false)
     private String destination;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private RideStatus status;
 
     private BigDecimal fareEstimate;
@@ -34,22 +28,20 @@ public class Ride {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        status = RideStatus.REQUESTED; // Default state when created
+    public Ride() {
+        this.createdAt = LocalDateTime.now();
+        this.status = RideStatus.REQUESTED; // Default state when created
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+    public void updateTimestamp() {
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

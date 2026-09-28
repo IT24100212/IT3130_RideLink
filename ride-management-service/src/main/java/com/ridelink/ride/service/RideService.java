@@ -23,7 +23,7 @@ public class RideService {
         return rideRepository.save(ride);
     }
 
-    public Ride assignDriver(Long rideId, Long driverId) {
+    public Ride assignDriver(String rideId, Long driverId) {
         Ride ride = getRideById(rideId);
         if (ride.getStatus() != RideStatus.REQUESTED) {
             throw new IllegalStateException("Ride must be in REQUESTED state to assign a driver.");
@@ -33,7 +33,7 @@ public class RideService {
         return rideRepository.save(ride);
     }
 
-    public Ride updateRideStatus(Long rideId, RideStatus newStatus) {
+    public Ride updateRideStatus(String rideId, RideStatus newStatus) {
         Ride ride = getRideById(rideId);
 
         switch (newStatus) {
@@ -57,7 +57,7 @@ public class RideService {
         return rideRepository.save(ride);
     }
 
-    public Ride getRideById(Long rideId) {
+    public Ride getRideById(String rideId) {
         return rideRepository.findById(rideId)
                 .orElseThrow(() -> new RuntimeException("Ride not found with ID: " + rideId));
     }
