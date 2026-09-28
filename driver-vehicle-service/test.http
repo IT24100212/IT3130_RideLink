@@ -1,0 +1,34 @@
+POST http://localhost:8080/api/drivers/
+Content-Type: application/json
+
+{
+  "name": "Kamal Perera",
+  "phone": "0712345678",
+  "licenseNumber": "B1234567",
+  "status": "AVAILABLE"
+}
+
+###
+
+GET http://localhost:8080/api/drivers
+
+###
+
+PUT http://localhost:8080/api/drivers/6ab98d8adc712b46210a04f7
+Content-Type: application/json
+
+{
+  "name": "Kamal Perera",
+  "phone": "0771234567",
+  "licenseNumber": "B1234567",
+  "status": "AVAILABLE"
+}
+
+
+###
+
+DELETE http://localhost:8080/api/drivers/6ab98d8adc712b46210a04f7
+
+###
+
+GET http://localhost:8080/api/drivers
