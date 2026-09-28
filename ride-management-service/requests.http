@@ -1,0 +1,24 @@
+### 1. Request a new ride (POST)
+POST http://localhost:8081/api/rides?passengerId=1&pickupLocation=SLIIT_Campus&destination=Colombo
+Accept: application/json
+
+> {% 
+    // Automatically save the newly generated MongoDB ID for the next requests
+    client.global.set("rideId", response.body.id); 
+%}
+
+### 2. Fetch the created ride (GET)
+GET http://localhost:8081/api/rides/{{rideId}}
+Accept: application/json
+
+### 3. Assign a driver (PUT)
+PUT http://localhost:8081/api/rides/{{rideId}}/assign?driverId=99
+Accept: application/json
+
+### 4. Update ride status to ACCEPTED (PUT)
+PUT http://localhost:8081/api/rides/{{rideId}}/status?status=ACCEPTED
+Accept: application/json
+
+### 5. Update ride status to IN_PROGRESS (PUT)
+PUT http://localhost:8081/api/rides/{{rideId}}/status?status=IN_PROGRESS
+Accept: application/json
