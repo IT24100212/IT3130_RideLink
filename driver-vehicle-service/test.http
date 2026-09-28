@@ -32,3 +32,42 @@ DELETE http://localhost:8080/api/drivers/6ab98d8adc712b46210a04f7
 ###
 
 GET http://localhost:8080/api/drivers
+
+
+###
+
+POST http://localhost:8080/api/vehicles
+Content-Type: application/json
+
+{
+  "vehicleNumber": "CAB-1234",
+  "type": "CAR",
+  "model": "Toyota Prius",
+  "color": "White",
+  "status": "AVAILABLE"
+}
+
+###
+
+GET http://localhost:8080/api/vehicles
+
+###
+
+GET http://localhost:8080/api/vehicles/6ab9ff933eae7f2428c13b85
+
+###
+
+PUT http://localhost:8080/api/vehicles/6ab9ff933eae7f2428c13b85
+Content-Type: application/json
+
+{
+  "vehicleNumber": "CAB-1234",
+  "type": "CAR",
+  "model": "Toyota Prius",
+  "color": "Black",
+  "status": "IN_USE"
+}
+
+###
+
+DELETE http://localhost:8080/api/vehicles/6ab9ff933eae7f2428c13b85
