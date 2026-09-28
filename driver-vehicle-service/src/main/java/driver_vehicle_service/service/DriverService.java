@@ -41,4 +41,8 @@ public class DriverService {
     public void deleteDriver(String id) {
         driverRepository.deleteById(id);
     }
+
+    public List<Driver> getEligibleDrivers(String serviceArea) {
+        return driverRepository.findByStatusAndServiceArea("AVAILABLE", serviceArea);
+    }
 }

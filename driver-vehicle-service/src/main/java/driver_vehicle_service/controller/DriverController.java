@@ -29,6 +29,11 @@ public class DriverController {
         return driverService.getAllDrivers();
     }
 
+    @GetMapping("/eligible")
+    public List<Driver> getEligibleDrivers(@RequestParam String serviceArea) {
+        return driverService.getEligibleDrivers(serviceArea);
+    }
+
     // Get driver by ID
     @GetMapping("/{id}")
     public ResponseEntity<Driver> getDriverById(@PathVariable String id) {

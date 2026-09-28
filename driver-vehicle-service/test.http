@@ -71,3 +71,28 @@ Content-Type: application/json
 ###
 
 DELETE http://localhost:8080/api/vehicles/6ab9ff933eae7f2428c13b85
+
+###
+
+GET http://localhost:8080/api/drivers
+
+
+
+###
+
+PUT http://localhost:8080/api/drivers/6ab9f28a35e5d0b2b195e674
+Content-Type: application/json
+
+{
+  "name": "Kamal Perera",
+  "phone": "0712345678",
+  "licenseNumber": "B1234567",
+  "status": "AVAILABLE",
+  "serviceArea": "Colombo",
+  "currentLatitude": 6.9271,
+  "currentLongitude": 79.8612
+}
+
+###
+
+GET http://localhost:8080/api/drivers/eligible?serviceArea=Colombo
