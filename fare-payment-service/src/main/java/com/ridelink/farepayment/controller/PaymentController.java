@@ -2,7 +2,6 @@ package com.ridelink.farepayment.controller;
 
 import com.ridelink.farepayment.model.Payment;
 import com.ridelink.farepayment.service.PaymentService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +10,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/payments")
-@RequiredArgsConstructor
 public class PaymentController {
 
     private final PaymentService paymentService;
+
+    // Explicit constructor replaces Lombok
+    public PaymentController(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
 
     @PostMapping("/process")
     public ResponseEntity<Payment> processPayment(

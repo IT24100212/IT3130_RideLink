@@ -1,0 +1,246 @@
+{
+	"info": {
+		"_postman_id": "ridelink-system-api-collection",
+		"name": "RideLink System Microservices API Collection",
+		"description": "Postman collection for demonstrating RideLink Microservices System (Ride Management, Fare & Payment, Driver & Vehicle services).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Driver & Vehicle Service (Port 8080)",
+			"item": [
+				{
+					"name": "Create Driver",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"+94771234567\",\n  \"serviceArea\": \"Colombo\",\n  \"active\": true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/drivers",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "drivers"]
+						}
+					}
+				},
+				{
+					"name": "Get All Drivers",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/drivers",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "drivers"]
+						}
+					}
+				},
+				{
+					"name": "Get Eligible Drivers",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/drivers/eligible?serviceArea=Colombo",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "drivers", "eligible"],
+							"query": [
+								{ "key": "serviceArea", "value": "Colombo" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Vehicle",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"make\": \"Toyota\",\n  \"model\": \"Prius\",\n  \"licensePlate\": \"CAB-1234\",\n  \"type\": \"CAR\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/vehicles",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "vehicles"]
+						}
+					}
+				},
+				{
+					"name": "Get All Vehicles",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8080/api/vehicles",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["api", "vehicles"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Ride Management Service (Port 8081)",
+			"item": [
+				{
+					"name": "Request a Ride",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "http://localhost:8081/api/rides?passengerId=101&pickupLocation=Colombo&destination=Kandy",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["api", "rides"],
+							"query": [
+								{ "key": "passengerId", "value": "101" },
+								{ "key": "pickupLocation", "value": "Colombo" },
+								{ "key": "destination", "value": "Kandy" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Assign Driver to Ride",
+					"request": {
+						"method": "PUT",
+						"url": {
+							"raw": "http://localhost:8081/api/rides/1/assign?driverId=201",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["api", "rides", "1", "assign"],
+							"query": [
+								{ "key": "driverId", "value": "201" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Ride Status",
+					"request": {
+						"method": "PUT",
+						"url": {
+							"raw": "http://localhost:8081/api/rides/1/status?status=ACCEPTED",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["api", "rides", "1", "status"],
+							"query": [
+								{ "key": "status", "value": "ACCEPTED" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Fetch Ride Details",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8081/api/rides/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["api", "rides", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Fare & Payment Service (Port 8082)",
+			"item": [
+				{
+					"name": "Calculate Fare",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "http://localhost:8082/api/fares/calculate?rideId=1&distanceInKm=12.5&durationInMinutes=25",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["api", "fares", "calculate"],
+							"query": [
+								{ "key": "rideId", "value": "1" },
+								{ "key": "distanceInKm", "value": "12.5" },
+								{ "key": "durationInMinutes", "value": "25" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Fare by Ride ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8082/api/fares/ride/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["api", "fares", "ride", "1"]
+						}
+					}
+				},
+				{
+					"name": "Process Payment",
+					"request": {
+						"method": "POST",
+						"url": {
+							"raw": "http://localhost:8082/api/payments/process?rideId=1&passengerId=101&amount=1175.00&paymentMethod=CARD",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["api", "payments", "process"],
+							"query": [
+								{ "key": "rideId", "value": "1" },
+								{ "key": "passengerId", "value": "101" },
+								{ "key": "amount", "value": "1175.00" },
+								{ "key": "paymentMethod", "value": "CARD" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Payments by Passenger ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8082/api/payments/passenger/101",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["api", "payments", "passenger", "101"]
+						}
+					}
+				},
+				{
+					"name": "Get Payments by Ride ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8082/api/payments/ride/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["api", "payments", "ride", "1"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

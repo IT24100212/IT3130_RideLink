@@ -1,0 +1,14 @@
+### 1. Calculate a Fare
+POST http://localhost:8082/api/fares/calculate?rideId=1&distanceInKm=12.5&durationInMinutes=25
+
+### 2. Get Fare by Ride ID
+GET http://localhost:8082/api/fares/ride/1
+
+### 3. Process a Payment
+POST http://localhost:8082/api/payments/process?rideId=1&passengerId=101&amount=1175.00&paymentMethod=CARD
+
+### 4. Get Payments by Passenger ID
+GET http://localhost:8082/api/payments/passenger/101
+
+### 5. Get Payments by Ride ID
+GET http://localhost:8082/api/payments/ride/1

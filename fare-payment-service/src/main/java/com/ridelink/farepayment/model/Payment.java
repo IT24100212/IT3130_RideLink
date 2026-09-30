@@ -1,43 +1,80 @@
 package com.ridelink.farepayment.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "payments")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Document(collection = "payments")
 public class Payment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(nullable = false)
     private Long rideId;
-
-    @Column(nullable = false)
     private Long passengerId;
-
-    @Column(nullable = false)
     private BigDecimal amount;
+    private String paymentMethod;
+    private String status;
 
-    @Column(nullable = false)
-    private String paymentMethod; // e.g., CASH, CARD, WALLET
+    // Default Constructor
+    public Payment() {
+    }
 
-    @Column(nullable = false)
-    private String status; // e.g., PENDING, COMPLETED, FAILED
+    // All-Args Constructor
+    public Payment(Long rideId, Long passengerId, BigDecimal amount, String paymentMethod, String status) {
+        this.rideId = rideId;
+        this.passengerId = passengerId;
+        this.amount = amount;
+        this.paymentMethod = paymentMethod;
+        this.status = status;
+    }
 
-    private LocalDateTime paymentTime;
+    // Getters and Setters
+    public String getId() {
+        return id;
+    }
 
-    @PrePersist
-    protected void onCreate() {
-        this.paymentTime = LocalDateTime.now();
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Long getRideId() {
+        return rideId;
+    }
+
+    public void setRideId(Long rideId) {
+        this.rideId = rideId;
+    }
+
+    public Long getPassengerId() {
+        return passengerId;
+    }
+
+    public void setPassengerId(Long passengerId) {
+        this.passengerId = passengerId;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

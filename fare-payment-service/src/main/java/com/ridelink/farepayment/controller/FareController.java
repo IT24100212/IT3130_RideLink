@@ -2,16 +2,19 @@ package com.ridelink.farepayment.controller;
 
 import com.ridelink.farepayment.model.Fare;
 import com.ridelink.farepayment.service.FareService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/fares")
-@RequiredArgsConstructor
 public class FareController {
 
     private final FareService fareService;
+
+    // Explicit constructor replaces Lombok
+    public FareController(FareService fareService) {
+        this.fareService = fareService;
+    }
 
     @PostMapping("/calculate")
     public ResponseEntity<Fare> calculateFare(
