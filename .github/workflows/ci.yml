@@ -7,32 +7,110 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-spring-boot-services:
-    name: Build and Test All Services
+  build-account-service:
+    name: Build and Test Account Service
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
 
-      - name: Build Account Service
+      - name: Build and Test Account Service
         working-directory: ./account-service
-        run: mvn clean test
+        run: ./mvnw clean test
 
-      - name: Build Ride Management Service
+  build-ride-management-service:
+    name: Build and Test Ride Management Service
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check if service is implemented
+        id: check
+        run: |
+          if [ -f "./ride-management-service/pom.xml" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "::notice::ride-management-service has no pom.xml — skipping build."
+          fi
+
+      - name: Set up JDK 17
+        if: steps.check.outputs.exists == 'true'
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and Test Ride Management Service
+        if: steps.check.outputs.exists == 'true'
         working-directory: ./ride-management-service
-        run: mvn clean test
+        run: ./mvnw clean test
 
-      - name: Build Driver & Vehicle Service
+  build-driver-vehicle-service:
+    name: Build and Test Driver & Vehicle Service
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check if service is implemented
+        id: check
+        run: |
+          if [ -f "./driver-vehicle-service/pom.xml" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "::notice::driver-vehicle-service has no pom.xml — skipping build."
+          fi
+
+      - name: Set up JDK 17
+        if: steps.check.outputs.exists == 'true'
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and Test Driver & Vehicle Service
+        if: steps.check.outputs.exists == 'true'
         working-directory: ./driver-vehicle-service
-        run: mvn clean test
+        run: ./mvnw clean test
 
-      - name: Build Fare & Payment Service
+  build-fare-payment-service:
+    name: Build and Test Fare & Payment Service
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check if service is implemented
+        id: check
+        run: |
+          if [ -f "./fare-payment-service/pom.xml" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "::notice::fare-payment-service has no pom.xml — skipping build."
+          fi
+
+      - name: Set up JDK 17
+        if: steps.check.outputs.exists == 'true'
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and Test Fare & Payment Service
+        if: steps.check.outputs.exists == 'true'
         working-directory: ./fare-payment-service
-        run: mvn clean test
+        run: ./mvnw clean test
