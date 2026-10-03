@@ -21,7 +21,7 @@ public class PaymentController {
 
     @PostMapping("/process")
     public ResponseEntity<Payment> processPayment(
-            @RequestParam Long rideId,
+            @RequestParam String rideId,
             @RequestParam Long passengerId,
             @RequestParam BigDecimal amount,
             @RequestParam String paymentMethod) {
@@ -36,7 +36,7 @@ public class PaymentController {
     }
 
     @GetMapping("/ride/{rideId}")
-    public ResponseEntity<List<Payment>> getPaymentsByRide(@PathVariable Long rideId) {
+    public ResponseEntity<List<Payment>> getPaymentsByRide(@PathVariable String rideId) {
         List<Payment> payments = paymentService.getPaymentsByRide(rideId);
         return ResponseEntity.ok(payments);
     }

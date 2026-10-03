@@ -19,7 +19,7 @@ public class FareService {
         this.fareRepository = fareRepository;
     }
 
-    public Fare calculateAndSaveFare(Long rideId, double distanceInKm, double durationInMinutes) {
+    public Fare calculateAndSaveFare(String rideId, double distanceInKm, double durationInMinutes) {
         BigDecimal baseFare = BASE_RATE;
         BigDecimal distanceFare = PER_KM_RATE.multiply(BigDecimal.valueOf(distanceInKm));
         BigDecimal timeFare = PER_MINUTE_RATE.multiply(BigDecimal.valueOf(durationInMinutes));
@@ -30,7 +30,7 @@ public class FareService {
         return fareRepository.save(fare);
     }
 
-    public Fare getFareByRideId(Long rideId) {
+    public Fare getFareByRideId(String rideId) {
         return fareRepository.findByRideId(rideId)
                 .orElseThrow(() -> new RuntimeException("Fare not found for ride ID: " + rideId));
     }

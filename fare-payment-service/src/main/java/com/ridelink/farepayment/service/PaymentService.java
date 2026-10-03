@@ -16,7 +16,7 @@ public class PaymentService {
         this.paymentRepository = paymentRepository;
     }
 
-    public Payment processPayment(Long rideId, Long passengerId, BigDecimal amount, String paymentMethod) {
+    public Payment processPayment(String rideId, Long passengerId, BigDecimal amount, String paymentMethod) {
         Payment payment = new Payment(rideId, passengerId, amount, paymentMethod, "COMPLETED");
         return paymentRepository.save(payment);
     }
@@ -25,7 +25,7 @@ public class PaymentService {
         return paymentRepository.findByPassengerId(passengerId);
     }
 
-    public List<Payment> getPaymentsByRide(Long rideId) {
+    public List<Payment> getPaymentsByRide(String rideId) {
         return paymentRepository.findByRideId(rideId);
     }
 }

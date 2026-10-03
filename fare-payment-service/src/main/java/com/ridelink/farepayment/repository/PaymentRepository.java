@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface PaymentRepository extends MongoRepository<Payment, String> {
     List<Payment> findByPassengerId(Long passengerId);
-    List<Payment> findByRideId(Long rideId);
+    List<Payment> findByRideId(String rideId);
 }

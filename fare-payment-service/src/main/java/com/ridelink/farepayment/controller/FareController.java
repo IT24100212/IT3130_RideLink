@@ -18,7 +18,7 @@ public class FareController {
 
     @PostMapping("/calculate")
     public ResponseEntity<Fare> calculateFare(
-            @RequestParam Long rideId,
+            @RequestParam String rideId,
             @RequestParam double distanceInKm,
             @RequestParam double durationInMinutes) {
         Fare fare = fareService.calculateAndSaveFare(rideId, distanceInKm, durationInMinutes);
@@ -26,7 +26,7 @@ public class FareController {
     }
 
     @GetMapping("/ride/{rideId}")
-    public ResponseEntity<Fare> getFareByRideId(@PathVariable Long rideId) {
+    public ResponseEntity<Fare> getFareByRideId(@PathVariable String rideId) {
         Fare fare = fareService.getFareByRideId(rideId);
         return ResponseEntity.ok(fare);
     }

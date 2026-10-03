@@ -10,7 +10,7 @@ public class Payment {
     @Id
     private String id;
 
-    private Long rideId;
+    private String rideId;
     private Long passengerId;
     private BigDecimal amount;
     private String paymentMethod;
@@ -21,7 +21,7 @@ public class Payment {
     }
 
     // All-Args Constructor
-    public Payment(Long rideId, Long passengerId, BigDecimal amount, String paymentMethod, String status) {
+    public Payment(String rideId, Long passengerId, BigDecimal amount, String paymentMethod, String status) {
         this.rideId = rideId;
         this.passengerId = passengerId;
         this.amount = amount;
@@ -38,11 +38,11 @@ public class Payment {
         this.id = id;
     }
 
-    public Long getRideId() {
+    public String getRideId() {
         return rideId;
     }
 
-    public void setRideId(Long rideId) {
+    public void setRideId(String rideId) {
         this.rideId = rideId;
     }
 

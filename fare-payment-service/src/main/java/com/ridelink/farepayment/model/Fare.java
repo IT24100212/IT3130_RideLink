@@ -10,7 +10,7 @@ public class Fare {
     @Id
     private String id;
 
-    private Long rideId;
+    private String rideId;
     private BigDecimal baseFare;
     private BigDecimal distanceFare;
     private BigDecimal timeFare;
@@ -22,7 +22,7 @@ public class Fare {
     }
 
     // All-Args Constructor
-    public Fare(Long rideId, BigDecimal baseFare, BigDecimal distanceFare, BigDecimal timeFare, BigDecimal totalFare, String currency) {
+    public Fare(String rideId, BigDecimal baseFare, BigDecimal distanceFare, BigDecimal timeFare, BigDecimal totalFare, String currency) {
         this.rideId = rideId;
         this.baseFare = baseFare;
         this.distanceFare = distanceFare;
@@ -40,11 +40,11 @@ public class Fare {
         this.id = id;
     }
 
-    public Long getRideId() {
+    public String getRideId() {
         return rideId;
     }
 
-    public void setRideId(Long rideId) {
+    public void setRideId(String rideId) {
         this.rideId = rideId;
     }
 

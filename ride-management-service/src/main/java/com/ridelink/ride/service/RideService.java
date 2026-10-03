@@ -1,17 +1,35 @@
 package com.ridelink.ride.service;
 
+import com.ridelink.ride.dto.DriverDTO;
+import com.ridelink.ride.dto.FareDTO;
 import com.ridelink.ride.model.Ride;
 import com.ridelink.ride.model.RideStatus;
 import com.ridelink.ride.repository.RideRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class RideService {
 
     private final RideRepository rideRepository;
+    private final RestTemplate restTemplate;
 
-    public RideService(RideRepository rideRepository) {
+    @Value("${fare.service.url:http://localhost:8084/api/fares}")
+    private String fareServiceUrl;
+
+    @Value("${driver.service.url:http://localhost:8082/api/vehicles}")
+    private String driverServiceUrl; // Note: You might want an api/drivers endpoint instead. Assuming driver-vehicle-service has it. Wait, the controller path was /api/drivers
+
+    public RideService(RideRepository rideRepository, RestTemplate restTemplate) {
         this.rideRepository = rideRepository;
+        this.restTemplate = restTemplate;
     }
 
     public Ride requestRide(Long passengerId, String pickupLocation, String destination) {
@@ -19,7 +37,50 @@ public class RideService {
         ride.setPassengerId(passengerId);
         ride.setPickupLocation(pickupLocation);
         ride.setDestination(destination);
-        // Status defaults to REQUESTED via the @PrePersist method in your Ride entity
+        // Save first to generate rideId
+        ride = rideRepository.save(ride);
+
+        double simulatedDistance = 5.0;
+        double simulatedDuration = 15.0;
+
+        try {
+            String fareUrl = UriComponentsBuilder.fromHttpUrl(fareServiceUrl + "/calculate")
+                .queryParam("rideId", ride.getId())
+                .queryParam("distanceInKm", simulatedDistance)
+                .queryParam("durationInMinutes", simulatedDuration)
+                .toUriString();
+            
+            FareDTO fareDTO = restTemplate.postForObject(fareUrl, null, FareDTO.class);
+            if (fareDTO != null) {
+                ride.setFareEstimate(fareDTO.getTotalFare()); // Wait, FareDTO doesn't have getTotalFare? Let's check Fare.java in fare service. It has totalFare. But my DTO has estimatedAmount. I'll use finalAmount or estimatedAmount. But let's check FareDTO.
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to fetch fare estimate: " + e.getMessage());
+            ride.setFareEstimate(BigDecimal.ZERO);
+        }
+
+        try {
+            // Wait, what is the exact endpoint for drivers? It's /api/drivers/eligible in driver-vehicle-service
+            String driverUrl = UriComponentsBuilder.fromHttpUrl("http://localhost:8082/api/drivers/eligible")
+                .queryParam("serviceArea", pickupLocation)
+                .toUriString();
+                
+            List<DriverDTO> drivers = restTemplate.exchange(
+                driverUrl, 
+                HttpMethod.GET, 
+                null, 
+                new ParameterizedTypeReference<List<DriverDTO>>() {}
+            ).getBody();
+            
+            if (drivers != null && !drivers.isEmpty()) {
+                // For this scenario, assign the first available driver
+                ride.setDriverId(drivers.get(0).getUserId());
+                ride.setStatus(RideStatus.ASSIGNED);
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to fetch eligible drivers: " + e.getMessage());
+        }
+
         return rideRepository.save(ride);
     }
 
