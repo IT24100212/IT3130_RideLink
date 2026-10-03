@@ -1,0 +1,234 @@
+{
+	"info": {
+		"_postman_id": "c3b94b0d-5b32-4d0d-b4db-94943f9a73d2",
+		"name": "RideLink Microservices",
+		"description": "Postman collection demonstrating the full flow of the RideLink microservices project, including JWT authentication and inter-service communication.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Account Service",
+			"item": [
+				{
+					"name": "Register Passenger",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"passenger1\",\n    \"email\": \"pass@ridelink.com\",\n    \"password\": \"password123\",\n    \"role\": \"PASSENGER\"\n}"
+						},
+						"url": {
+							"raw": "{{account_url}}/api/auth/register",
+							"host": [
+								"{{account_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					}
+				},
+				{
+					"name": "Login Passenger",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"jwt_token\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"passenger1\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{account_url}}/api/auth/login",
+							"host": [
+								"{{account_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Driver Service",
+			"item": [
+				{
+					"name": "Set Driver Availability",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Driver Dan\",\n    \"status\": \"AVAILABLE\",\n    \"serviceArea\": \"Downtown\"\n}"
+						},
+						"url": {
+							"raw": "{{driver_url}}/api/drivers",
+							"host": [
+								"{{driver_url}}"
+							],
+							"path": [
+								"api",
+								"drivers"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Ride & Fare Service",
+			"item": [
+				{
+					"name": "Request Ride",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"ride_id\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ride_url}}/api/rides/request?passengerId=1&pickupLocation=Downtown&destination=Airport",
+							"host": [
+								"{{ride_url}}"
+							],
+							"path": [
+								"api",
+								"rides",
+								"request"
+							],
+							"query": [
+								{
+									"key": "passengerId",
+									"value": "1"
+								},
+								{
+									"key": "pickupLocation",
+									"value": "Downtown"
+								},
+								{
+									"key": "destination",
+									"value": "Airport"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Complete Ride (Triggers Payment)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{ride_url}}/api/rides/{{ride_id}}/status?newStatus=COMPLETED",
+							"host": [
+								"{{ride_url}}"
+							],
+							"path": [
+								"api",
+								"rides",
+								"{{ride_id}}",
+								"status"
+							],
+							"query": [
+								{
+									"key": "newStatus",
+									"value": "COMPLETED"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "account_url",
+			"value": "http://localhost:8081"
+		},
+		{
+			"key": "driver_url",
+			"value": "http://localhost:8082"
+		},
+		{
+			"key": "ride_url",
+			"value": "http://localhost:8083"
+		},
+		{
+			"key": "fare_url",
+			"value": "http://localhost:8084"
+		}
+	]
+}
