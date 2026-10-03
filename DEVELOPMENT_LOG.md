@@ -28,3 +28,10 @@ This document tracks all modifications and architectural decisions made to align
 - **Security Configuration:** Injected stateless JWT filters (`JwtAuthenticationFilter`, `JwtTokenProvider`, `SecurityConfig`) into all microservices to secure endpoints and extract `ROLE_...` authorizations directly from the JWT claims without hitting the user database.
 - **Token Propagation:** Added an interceptor to the `RestTemplateConfig` in `ride-management-service` that captures the incoming `Authorization` Bearer token and forwards it during inter-service calls to ensure the backend services can authenticate the passenger's request.
 - *Status:* All endpoints secured. Compiled successfully. Pushed to Git.
+
+## 2026-10-03: Meaningful Unit Testing
+- **Testing Implementation:** Wrote isolated, Mockito-driven JUnit tests for the core business logic services across the un-tested microservices to satisfy the Section 6.3 testing requirement:
+  1. `driver-vehicle-service/DriverServiceTest`: Validated driver creation, eligible area retrieval, and ID fetching.
+  2. `ride-management-service/RideServiceTest`: Validated driver assignment to requested rides and state transition integrity.
+  3. `fare-payment-service/FareServiceTest`: Validated fare calculations, saving functionality, and missing record exception handling.
+- *Status:* All tests successfully passed via Maven. Committed and pushed to Git.
