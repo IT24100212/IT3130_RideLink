@@ -106,6 +106,18 @@ public class RideService {
                 break;
             case COMPLETED:
                 if (ride.getStatus() != RideStatus.IN_PROGRESS) throw new IllegalStateException("Ride must be IN_PROGRESS to be COMPLETED.");
+                // Simulate payment processing integration when a ride is completed
+                try {
+                    String paymentUrl = UriComponentsBuilder.fromUriString("http://localhost:8084/api/payments/process")
+                        .queryParam("rideId", ride.getId())
+                        .queryParam("passengerId", ride.getPassengerId())
+                        .queryParam("amount", ride.getFareEstimate())
+                        .queryParam("paymentMethod", "CREDIT_CARD")
+                        .toUriString();
+                    restTemplate.postForObject(paymentUrl, null, String.class);
+                } catch (Exception e) {
+                    System.err.println("Failed to process payment: " + e.getMessage());
+                }
                 break;
             case CANCELLED:
                 if (ride.getStatus() == RideStatus.COMPLETED) throw new IllegalStateException("Cannot cancel a COMPLETED ride.");
