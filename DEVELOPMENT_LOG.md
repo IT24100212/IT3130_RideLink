@@ -21,3 +21,10 @@ This document tracks all modifications and architectural decisions made to align
   1. Hits `fare-payment-service` to generate and return a base estimated fare.
   2. Hits `driver-vehicle-service` to find eligible drivers based on the pickup location and assigns the first available driver.
 - *Status:* End-to-end booking flow demonstrated successfully. Committed and pushed to Git.
+
+## 2026-10-03: Distributed Security (JWT) across all microservices
+- **Dependencies:** Added `spring-boot-starter-security` and `jjwt` libraries to `driver-vehicle-service`, `ride-management-service`, and `fare-payment-service`.
+- **Secret Sharing:** Centralized the `jwt.secret` in all application properties so they can independently cryptographically verify tokens issued by `account-service`.
+- **Security Configuration:** Injected stateless JWT filters (`JwtAuthenticationFilter`, `JwtTokenProvider`, `SecurityConfig`) into all microservices to secure endpoints and extract `ROLE_...` authorizations directly from the JWT claims without hitting the user database.
+- **Token Propagation:** Added an interceptor to the `RestTemplateConfig` in `ride-management-service` that captures the incoming `Authorization` Bearer token and forwards it during inter-service calls to ensure the backend services can authenticate the passenger's request.
+- *Status:* All endpoints secured. Compiled successfully. Pushed to Git.

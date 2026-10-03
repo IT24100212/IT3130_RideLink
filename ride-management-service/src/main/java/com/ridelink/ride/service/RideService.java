@@ -44,7 +44,7 @@ public class RideService {
         double simulatedDuration = 15.0;
 
         try {
-            String fareUrl = UriComponentsBuilder.fromHttpUrl(fareServiceUrl + "/calculate")
+            String fareUrl = UriComponentsBuilder.fromUriString(fareServiceUrl + "/calculate")
                 .queryParam("rideId", ride.getId())
                 .queryParam("distanceInKm", simulatedDistance)
                 .queryParam("durationInMinutes", simulatedDuration)
@@ -61,7 +61,7 @@ public class RideService {
 
         try {
             // Wait, what is the exact endpoint for drivers? It's /api/drivers/eligible in driver-vehicle-service
-            String driverUrl = UriComponentsBuilder.fromHttpUrl("http://localhost:8082/api/drivers/eligible")
+            String driverUrl = UriComponentsBuilder.fromUriString("http://localhost:8082/api/drivers/eligible")
                 .queryParam("serviceArea", pickupLocation)
                 .toUriString();
                 
